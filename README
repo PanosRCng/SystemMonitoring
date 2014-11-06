@@ -1,0 +1,21 @@
+
+System Monitoring
+
+
+   ServerApp - (Push and Pull server)
+
+   PushClientApp - (placed to the monitored host)
+
+   PullClientApp - (monitoring app)
+
+
+
+  requirements:
+
+	 - Java JDK (tested with java version 1.7, OpenJDK)
+	 - MySQL
+
+
+
+
+	(*) proof of concept stage

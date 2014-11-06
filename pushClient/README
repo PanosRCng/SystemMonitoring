@@ -1,5 +1,6 @@
 
-################################
+______________________________
+
 compile / run client
 ______________________________
 
@@ -10,21 +11,21 @@ java -cp ':lib/sigar.jar:lib/gson-2.3.jar:.' PushClientApp
 
 
 
-_________________________
+__________________________
 
-client
+setup client's keys
 __________________________
 
 
 # generate key pair and store it to keystore
 
-keytool -genkey -alias annaClientPrivateKey -keystore annaClient.private -storetype JKS -keyalg rsa -dname "CN=anna, OU=anna Organizational Unit, O=anna Organization, L=anna City, S=anna State, C=anna Country" -storepass annaClientPass -keypass annaClientPass
+keytool -genkey -alias testClientPrivateKey -keystore testClient.private -storetype JKS -keyalg rsa -dname "CN=test, OU=test Organizational Unit, O=test Organization, L=test City, S=test State, C=test Country" -storepass testClientPass -keypass testClientPass
 
 
 
 # export public key
 
-keytool -export -alias annaClientPrivateKey -keystore annaClient.private -file annaClientPublicKey.key -storepass annaClientPass
+keytool -export -alias testClientPrivateKey -keystore testClient.private -file testClientPublicKey.key -storepass testClientPass
 
 
 

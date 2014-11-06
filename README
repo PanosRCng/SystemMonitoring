@@ -16,6 +16,11 @@ System Monitoring
 	 - MySQL
 
 
+  external libraries used:
+
+	google-gson (https://code.google.com/p/google-gson/)
+	JDBC Driver for MySQL (http://dev.mysql.com/downloads/connector/j/)
+	Sigar (https://support.hyperic.com/display/SIGAR/Home)
 
 
 	(*) proof of concept stage

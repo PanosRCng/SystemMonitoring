@@ -1,0 +1,31 @@
+
+______________________________
+
+compile / run client
+______________________________
+
+
+javac -cp ':lib/gson-2.3.jar:.' PullClientApp.java
+
+java -cp ':lib/gson-2.3.jar:.' PullClientApp
+
+
+
+__________________________
+
+setup client's keys
+__________________________
+
+
+# generate key pair and store it to keystore
+
+keytool -genkey -alias testClientPrivateKey -keystore testClient.private -storetype JKS -keyalg rsa -dname "CN=test, OU=test Organizational Unit, O=test Organization, L=test City, S=test State, C=test Country" -storepass testClientPass -keypass testClientPass
+
+
+
+# export public key
+
+keytool -export -alias testClientPrivateKey -keystore testClient.private -file testClientPublicKey.key -storepass testClientPass
+
+
+

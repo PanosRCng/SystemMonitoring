@@ -18,6 +18,16 @@ public class PushServer implements Runnable
 	// passphrase for accessing the clients' keystore
 	private final static String CLIENTS_KEYSTORE_PASS = "public";
 
+        // the enabled protocols
+        private final static String[] protocols = {
+                                                   "TLSv1.2"
+                                                  };
+
+        // the enabled cipher suites
+        private final static String[] suites = {
+                                                "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256"
+                                               };
+
 	// keyStore for storing the server's key pair
 	private KeyStore serverKeyStore;
 
@@ -49,10 +59,7 @@ public class PushServer implements Runnable
 		this.pushServerListener = pushServerListener;
 		this.server_port = server_port;
 
-		pushServerListener.onPushServerStatusChanged("secure random numbers are initialized");
-		secureRandom = new SecureRandom();
-		secureRandom.nextInt();
-		pushServerListener.onPushServerStatusChanged("secure random number initialized ok");
+		initSecureRandom();
 	}
 
 
@@ -74,8 +81,14 @@ public class PushServer implements Runnable
 				// create a ServerSocket object and start listening for clients
       				server = (SSLServerSocket)sf.createServerSocket( server_port );
 
-      				// require client authorization
-      				server.setNeedClientAuth( true );
+                                // set the enables protocols
+                                server.setEnabledProtocols(protocols);
+
+                                // set the enabled cipher suites
+                                server.setEnabledCipherSuites(suites);
+
+                                // require client authentication
+                                server.setNeedClientAuth( true );
 
 				pushServerListener.onPushServerStatusChanged("Listening on port "+ server_port);
 

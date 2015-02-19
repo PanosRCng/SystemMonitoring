@@ -63,10 +63,7 @@ public class PushWorker implements Runnable
 		this.remote_port = remote_port;
 		this.reports = reports;
 
-		pushWorkerListener.onPushWorkerStatusChanged("secure random numbers are initialized");
-		secureRandom = new SecureRandom();
-		secureRandom.nextInt();
-		pushWorkerListener.onPushWorkerStatusChanged("secure random number initialized ok");
+		initSecureRandom();		
 	}
 
 	public void run()
@@ -153,6 +150,17 @@ public class PushWorker implements Runnable
 	}
 
 
+	private void initSecureRandom()
+	{
+		pushWorkerListener.onPushWorkerStatusChanged("secure random numbers are initialized");
+
+		// construct a secure random number generator, implementing the default random number algorithm
+    		secureRandom = new SecureRandom();
+    		secureRandom.nextInt();
+
+		pushWorkerListener.onPushWorkerStatusChanged("secure random numbers initialized ok");
+	}
+
 	private void setupClientKeyStore() throws GeneralSecurityException, IOException
 	{
 		// get a Keystore object for the JKS keystore type
@@ -187,9 +195,9 @@ public class PushWorker implements Runnable
 		// initialize this factory with the client key pair keystore as the key material for the secure sockets
 	   	kmf.init( clientKeyStore, CLIENT_KEYSTORE_PASS.toCharArray() );
 
-		// get a SSLContext object that implements the TLS secure socket protocol
-		sslContext = SSLContext.getInstance( "TLS" );
-    
+		// get a SSLContext object that implements the TLSv1.2 secure socket protocol
+		sslContext = SSLContext.getInstance( "TLSv1.2" );
+
 		// initialize this SSLContext
 		sslContext.init( kmf.getKeyManagers(), tmf.getTrustManagers(), secureRandom );
 	}

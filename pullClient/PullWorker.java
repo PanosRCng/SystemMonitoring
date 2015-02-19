@@ -60,10 +60,7 @@ public class PullWorker extends TimerTask
 		this.remote_server = remote_server;
 		this.remote_port = remote_port;
 
-		pullWorkerListener.onPullWorkerStatusChanged("secure random numbers are initialized");
-		secureRandom = new SecureRandom();
-		secureRandom.nextInt();
-		pullWorkerListener.onPullWorkerStatusChanged("secure random number initialized ok");
+		initSecureRandom();
 	}
 
 
@@ -150,6 +147,18 @@ public class PullWorker extends TimerTask
 	}
 
 
+	private void initSecureRandom()
+	{
+		pullWorkerListener.onPullWorkerStatusChanged("secure random numbers are initialized");
+
+		// construct a secure random number generator, implementing the default random number algorithm
+		secureRandom = new SecureRandom();
+		secureRandom.nextInt();
+
+		pullWorkerListener.onPullWorkerStatusChanged("secure random number initialized ok");
+	}
+
+
 	private void setupClientKeyStore() throws GeneralSecurityException, IOException
 	{
 		// get a Keystore object for the JKS keystore type
@@ -184,8 +193,8 @@ public class PullWorker extends TimerTask
 		// initialize this factory with the client key pair keystore as the key material for the secure sockets
 	   	kmf.init( clientKeyStore, CLIENT_KEYSTORE_PASS.toCharArray() );
 
-		// get a SSLContext object that implements the TLS secure socket protocol
-		sslContext = SSLContext.getInstance( "TLS" );
+		// get a SSLContext object that implements the TLSv1.2 secure socket protocol
+		sslContext = SSLContext.getInstance( "TLSv1.2" );
     
 		// initialize this SSLContext
 		sslContext.init( kmf.getKeyManagers(), tmf.getTrustManagers(), secureRandom );

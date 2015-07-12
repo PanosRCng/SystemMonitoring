@@ -207,15 +207,22 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 	{
 		ServerApp serverApp = new ServerApp();
 
-		serverApp.checkDatabase();
+		KeyManager keyManager = new KeyManager();
 
-		serverApp.startPushServer();
+		if (keyManager.getKeyPair() )
+		{
+			System.out.println("all cool");
+		}
 
-		serverApp.startPullServer();
+	//	serverApp.checkDatabase();
 
-		serverApp.startDbPusher();
+	//	serverApp.startPushServer();
 
-		serverApp.startDbPuller();
+	//	serverApp.startPullServer();
+
+	//	serverApp.startDbPusher();
+
+	//	serverApp.startDbPuller();
 	}
 
 }

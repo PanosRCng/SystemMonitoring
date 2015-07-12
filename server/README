@@ -5,9 +5,9 @@ compile / run server
 ______________________________
 
 
-javac -cp ':lib/gson-2.3.jar:lib/mysql-connector-java-5.1.33-bin.jar:.' ServerApp.java
+javac -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:lib/mysql-connector-java-5.1.33-bin.jar:.' ServerApp.java
 
-java -cp ':lib/gson-2.3.jar:lib/mysql-connector-java-5.1.33-bin.jar:.' ServerApp
+java -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:lib/mysql-connector-java-5.1.33-bin.jar:.' ServerApp
 
 
 

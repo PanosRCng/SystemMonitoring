@@ -38,7 +38,7 @@ public class PushServer implements Runnable
   	private SSLContext sslContext;
 
 	// a source of secure random numbers
-	static private SecureRandom secureRandom;
+	private static SecureRandom secureRandom;
 
 
 	// the port where the server listens

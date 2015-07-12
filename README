@@ -21,6 +21,7 @@ System Monitoring
 	google-gson (https://code.google.com/p/google-gson/)
 	JDBC Driver for MySQL (http://dev.mysql.com/downloads/connector/j/)
 	Sigar (https://support.hyperic.com/display/SIGAR/Home)
+	Bouncy Castle (https://www.bouncycastle.org/java.html)
 
 
 	(*) proof of concept stage

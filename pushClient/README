@@ -5,9 +5,9 @@ compile / run client
 ______________________________
 
 
-javac -cp ':lib/sigar.jar:lib/gson-2.3.jar:.' PushClientApp.java
+javac -cp ':lib/bcprov-jdk15on-152.jar:lib/sigar.jar:lib/gson-2.3.jar:.' PushClientApp.java
 
-java -cp ':lib/sigar.jar:lib/gson-2.3.jar:.' PushClientApp
+java -cp ':lib/bcprov-jdk15on-152.jar:lib/sigar.jar:lib/gson-2.3.jar:.' PushClientApp
 
 
 

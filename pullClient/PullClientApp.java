@@ -87,6 +87,17 @@ public class PullClientApp implements PullWorkerListener
 	{
 		PullClientApp pullclientApp = new PullClientApp();
 
+	/*
+		ClientKeyManager clientKeyManager = new ClientKeyManager();
+
+		if( clientKeyManager.getKeyPair() )
+		{
+			if( clientKeyManager.exportCertificate() )
+			{
+				System.out.println("all cool");
+			}
+		}
+	*/
 		pullclientApp.startPullWorker();
   	}
 }

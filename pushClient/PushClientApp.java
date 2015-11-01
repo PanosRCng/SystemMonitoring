@@ -103,7 +103,17 @@ public class PushClientApp implements PushWorkerListener, CollectorWorkerListene
 	public static void main(String[] args)
 	{
 		PushClientApp pushClientApp = new PushClientApp();
+	/*
+		ClientKeyManager clientKeyManager = new ClientKeyManager();
 
+		if( clientKeyManager.getKeyPair() )
+		{
+			if( clientKeyManager.exportCertificate() )
+			{
+				System.out.println("all cool");
+			}
+		}
+	*/
 		pushClientApp.startCollectorWorker();
   	}
 }

@@ -5,9 +5,9 @@ compile / run client
 ______________________________
 
 
-javac -cp ':lib/gson-2.3.jar:.' PullClientApp.java
+javac -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:.' PullClientApp.java
 
-java -cp ':lib/gson-2.3.jar:.' PullClientApp
+java -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:.' PullClientApp
 
 
 

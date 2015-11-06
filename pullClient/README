@@ -17,15 +17,8 @@ setup client's keys
 __________________________
 
 
-# generate key pair and store it to keystore
+# generate keys and setup keystores
 
-keytool -genkey -alias testClientPrivateKey -keystore testClient.private -storetype JKS -keyalg rsa -dname "CN=test, OU=test Organizational Unit, O=test Organization, L=test City, S=test State, C=test Country" -storepass testClientPass -keypass testClientPass
+java -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:.' PullClientApp setup_keys
 
-
-
-# export public key
-
-keytool -export -alias testClientPrivateKey -keystore testClient.private -file testClientPublicKey.key -storepass testClientPass
-
-
-
+(*) client.cert must be moved to server's clients trustore

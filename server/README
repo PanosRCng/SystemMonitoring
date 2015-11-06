@@ -17,32 +17,17 @@ setup server's keys
 ______________________
 
 
-# generate a server key pair and store it to keystore
+# generate keys and setup keystores
 
-keytool -genkey -alias serverPrivateKey -keystore server.private -storetype JKS -keyalg rsa -dname "CN=server, OU=server Organizational Unit, O=server Organization, L=server City, S=server State, C=server Country" -storepass serverPass -keypass serverPass
+java -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:lib/mysql-connector-java-5.1.33-bin.jar:.' ServerApp setup_keys
 
-
-# export public key
-
-keytool -export -alias serverPrivateKey -keystore server.private -file temp.key -storepass serverPass
-
-
-# import public key to keystore - move this to all clients
-
-keytool -import -noprompt -alias serverPublicKey -keystore server.public -file temp.key -storepass public
+(*) server.trustore must be moved to every client's keys folder
 
 
 
-#####################
-add client to server
-#####################
+# add a client's certificate to clients.trustore
 
-
-# store client's public keys to Clients keystore
-
-keytool -import -noprompt -alias testClientPublicKey -keystore clients.public -file testClientPublicKey.key -storepass public
-
-keytool -import -noprompt -alias test2ClientPublicKey -keystore clients.public -file test2ClientPublicKey.key -storepass public
+java -cp ':lib/bcprov-jdk15on-152.jar:lib/gson-2.3.jar:lib/mysql-connector-java-5.1.33-bin.jar:.' ServerApp add_client path_to_cert_file client_alias
 
 
 

@@ -9,38 +9,14 @@ import com.google.gson.Gson;
 
 public class PullWorker extends TimerTask
 {
-	// the client's key pair alias
-	private final static String CLIENT_KEYPAIR_ALIAS = "testClientPrivateKey"; 
-
-	//  the client's keystore file
-	private final static String CLIENT_KEYSTORE = "keys/testClient.private"; 
-
-	// the keystore file tha holds the server's public keys
-	private final static String SERVER_KEYSTORE = "keys/server.public";
-
-	// passphrase for accessing the client's keystore
-	private final static String CLIENT_KEYSTORE_PASS = "testClientPass";
-	
-	// passphrase for accessing the server's keystore
-  	private final static String SERVER_KEYSTORE_PASS = "public";
-
-	// keyStore for storing the client's key pair
-	private KeyStore clientKeyStore;
-  
-	// keyStore for storing the server's public key
-	private KeyStore serverKeyStore;
-
-	// used to generate a SocketFactory
-	private SSLContext sslContext;
-  
-	// a source of secure random numbers
-	static private SecureRandom secureRandom;
-
 	// holds the remote server ip
 	private String remote_server;
 
 	// holds the remote server port
 	private int remote_port;
+
+	// holds the Keymanager object
+	private ClientKeyManager clientKeyManager;
 
 	// the object that implements the PullWorkerListener interface
 	private static PullWorkerListener pullWorkerListener;
@@ -60,7 +36,7 @@ public class PullWorker extends TimerTask
 		this.remote_server = remote_server;
 		this.remote_port = remote_port;
 
-		initSecureRandom();
+		this.clientKeyManager = new ClientKeyManager();	
 	}
 
 
@@ -69,9 +45,7 @@ public class PullWorker extends TimerTask
 	{
 		try
 		{
-      			setupServerKeystore();
-      			setupClientKeyStore();
-      			setupSSLContext();
+			SSLContext sslContext = clientKeyManager.getSSLContext();
 
       			SSLSocketFactory sf = sslContext.getSocketFactory();
 
@@ -145,59 +119,4 @@ public class PullWorker extends TimerTask
     		}
 
 	}
-
-
-	private void initSecureRandom()
-	{
-		pullWorkerListener.onPullWorkerStatusChanged("secure random numbers are initialized");
-
-		// construct a secure random number generator, implementing the default random number algorithm
-		secureRandom = new SecureRandom();
-		secureRandom.nextInt();
-
-		pullWorkerListener.onPullWorkerStatusChanged("secure random number initialized ok");
-	}
-
-
-	private void setupClientKeyStore() throws GeneralSecurityException, IOException
-	{
-		// get a Keystore object for the JKS keystore type
-		clientKeyStore = KeyStore.getInstance( "JKS" );
-    
-		// load the client's keystore file
-		clientKeyStore.load( new FileInputStream( CLIENT_KEYSTORE ), CLIENT_KEYSTORE_PASS.toCharArray() );
-	}
-
-
-	private void setupServerKeystore() throws GeneralSecurityException, IOException
-	{
-		// get a Keystore object for the JKS keystore type
-		serverKeyStore = KeyStore.getInstance( "JKS" );
-    
-		// load the server's keystore file
-		serverKeyStore.load( new FileInputStream( SERVER_KEYSTORE ), SERVER_KEYSTORE_PASS.toCharArray() );
-	}
-
-
-	private void setupSSLContext() throws GeneralSecurityException, IOException
-	{
-		// get a TrustManagerFactory for that key manager algorithm
-		TrustManagerFactory tmf = TrustManagerFactory.getInstance( "SunX509" );
-		
-		// initialize this factory with the server's public key keystore as the trust material for the secure sockets
-		tmf.init( serverKeyStore );
-
-		// get a KeyManagerFactory for that key manager algorithm
-		KeyManagerFactory kmf = KeyManagerFactory.getInstance( "SunX509" );
-
-		// initialize this factory with the client key pair keystore as the key material for the secure sockets
-	   	kmf.init( clientKeyStore, CLIENT_KEYSTORE_PASS.toCharArray() );
-
-		// get a SSLContext object that implements the TLSv1.2 secure socket protocol
-		sslContext = SSLContext.getInstance( "TLSv1.2" );
-    
-		// initialize this SSLContext
-		sslContext.init( kmf.getKeyManagers(), tmf.getTrustManagers(), secureRandom );
-	}
-
 }

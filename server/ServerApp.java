@@ -201,14 +201,9 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 	}
 
 
-
-
-	public static void main(String[] args)
+	private static boolean setupKeys()
 	{
-		ServerApp serverApp = new ServerApp();
-
-	
-	/*	ServerKeyManager serverKeyManager = new ServerKeyManager();
+		ServerKeyManager serverKeyManager = new ServerKeyManager();
 	
 		if( serverKeyManager.getKeyPair() )
 		{
@@ -216,15 +211,83 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 			{
 				if( serverKeyManager.setClientsKeystore() )
 				{
-					if( serverKeyManager.addClientCertificate() )
-					{
-						System.out.println("all cool");
-					}
+					return true;
 				}
 			}
 		}
-	*/
-	
+
+		return false;
+	}
+
+
+	private static boolean addClient(String cert_filepath, String client_alias)
+	{
+		ServerKeyManager serverKeyManager = new ServerKeyManager();
+
+		if( serverKeyManager.addClientCertificate(cert_filepath, client_alias) )
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+
+	private static void printUsage()
+	{
+		System.out.println("usage");
+	}
+
+
+	private static boolean handleInput(String[] args)
+	{
+		for(int i=0; i<args.length; i++)
+		{
+			if( (args[i].length() > 256) && !(args[i] instanceof String) )
+			{
+				return false;
+			}
+		}
+
+		if(args.length == 1)
+		{
+			if( args[0].equals("setup_keys") )
+			{
+				if(setupKeys())
+				{
+					return true;
+				}
+			}				
+		}
+		else if(args.length == 3)
+		{
+			if( args[0].equals("add_client") )
+			{
+				if(addClient(args[1], args[2]))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+	public static void main(String[] args)
+	{
+		if(args.length > 0)
+		{
+			if( !handleInput(args) )
+			{
+				printUsage();
+			}
+
+			return;
+		}
+
+		ServerApp serverApp = new ServerApp();
+
 		serverApp.checkDatabase();
 
 		serverApp.startPushServer();

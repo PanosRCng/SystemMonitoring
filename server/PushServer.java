@@ -6,18 +6,6 @@ import com.google.gson.Gson;
 
 public class PushServer implements Runnable
 {
-	//  the server's keystore file
-	private final static String SERVER_KEYSTORE = "keys/server.private";
-	
-	// the keystore file tha holds the clients' public keys
-	private final static String CLIENTS_KEYSTORE = "keys/clients.public"; 
-
-	// passphrase for accessing the server's keystore
-  	private final static String SERVER_KEYSTORE_PASS = "serverPass";
-
-	// passphrase for accessing the clients' keystore
-	private final static String CLIENTS_KEYSTORE_PASS = "public";
-
         // the enabled protocols
         private final static String[] protocols = {
                                                    "TLSv1.2"
@@ -28,18 +16,8 @@ public class PushServer implements Runnable
                                                 "TLS_DHE_RSA_WITH_AES_128_CBC_SHA256"
                                                };
 
-	// keyStore for storing the server's key pair
-	private KeyStore serverKeyStore;
-
-	// keyStore for storing the clients' public key
-  	private KeyStore clientKeyStore;
-
-	// used to generate a SocketFactory
-  	private SSLContext sslContext;
-
-	// a source of secure random numbers
-	private static SecureRandom secureRandom;
-
+	// holds the Keymanager object
+	private ServerKeyManager serverKeyManager;
 
 	// the port where the server listens
 	private int server_port;
@@ -59,7 +37,7 @@ public class PushServer implements Runnable
 		this.pushServerListener = pushServerListener;
 		this.server_port = server_port;
 
-		initSecureRandom();
+		this.serverKeyManager = new ServerKeyManager();
 	}
 
 
@@ -67,9 +45,7 @@ public class PushServer implements Runnable
 	{
 		try
 		{
-      			setupClientsKeyStore();
-      			setupServerKeystore();
-      			setupSSLContext();
+			SSLContext sslContext = serverKeyManager.getSSLContext();   			
 
       			SSLServerSocketFactory sf = sslContext.getServerSocketFactory();
 
@@ -183,59 +159,5 @@ public class PushServer implements Runnable
     		}
 
 	}
-
-
-	private void initSecureRandom()
-	{
-		pushServerListener.onPushServerStatusChanged("secure random numbers are initialized");
-
-		// construct a secure random number generator, implementing the default random number algorithm
-    		secureRandom = new SecureRandom();
-    		secureRandom.nextInt();
-
-		pushServerListener.onPushServerStatusChanged("secure random numbers initialized ok");
-	}
-
-
-  	private void setupServerKeystore() throws GeneralSecurityException, IOException
-	{
-		// get a Keystore object for the JKS keystore type
-    		serverKeyStore = KeyStore.getInstance( "JKS" );
-
-		// load the server's keystore file
-    		serverKeyStore.load( new FileInputStream( SERVER_KEYSTORE ), SERVER_KEYSTORE_PASS.toCharArray() );
-  	}
-
-	
-	private void setupClientsKeyStore() throws GeneralSecurityException, IOException
-	{
-		// get a Keystore object for the JKS keystore type
-		clientKeyStore = KeyStore.getInstance( "JKS" );
-
-		// load the clients' keystore file
-    		clientKeyStore.load( new FileInputStream( CLIENTS_KEYSTORE ), CLIENTS_KEYSTORE_PASS.toCharArray() );
-  	}
-
-
-	private void setupSSLContext() throws GeneralSecurityException, IOException
-	{
-		// get a TrustManagerFactory for that key manager algorithm
-    		TrustManagerFactory tmf = TrustManagerFactory.getInstance( "SunX509" );
-
-		// initialize this factory with the clients' public keys keystore as the trust material for the secure sockets
-    		tmf.init( clientKeyStore );
-
-		// get a KeyManagerFactory for that key manager algorithm
-    		KeyManagerFactory kmf = KeyManagerFactory.getInstance( "SunX509" );
-
-		// initialize this factory with the server key pair keystore as the key material for the secure sockets
-    		kmf.init( serverKeyStore, SERVER_KEYSTORE_PASS.toCharArray() );
-
-		// get a SSLContext object that implements the TLS secure socket protocol
-    		sslContext = SSLContext.getInstance( "TLS" );
-
-		// initialize this SSLContext
-    		sslContext.init( kmf.getKeyManagers(), tmf.getTrustManagers(), secureRandom );
-  	}
 
 }

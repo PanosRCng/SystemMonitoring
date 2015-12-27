@@ -102,11 +102,18 @@ public class PushClientApp implements PushWorkerListener, CollectorWorkerListene
 
 	private static boolean setupKeys()
 	{
+		if( ClientKeyManager.checkSetup() )
+		{
+			System.out.println("can not setup keys / another set of keys is already in place");		
+	
+			return false;
+		}
+
 		ClientKeyManager clientKeyManager = new ClientKeyManager();
 	
 		if( clientKeyManager.getKeyPair() )
 		{
-			if( clientKeyManager.exportCertificate("push_client.cert") )
+			if( clientKeyManager.exportCertificate("client.cert") )
 			{
 				return true;
 			}
@@ -156,6 +163,20 @@ public class PushClientApp implements PushWorkerListener, CollectorWorkerListene
 				printUsage();
 			}
 
+			return;
+		}
+
+		if( !ClientKeyManager.checkSetup() )
+		{
+			System.out.println("keys not found / run setup_keys first to create keys");		
+	
+			return;
+		}
+
+		if( !ClientKeyManager.checkServerTrustStore() )
+		{
+			System.out.println("server TrustStore not found / place the server.trustore in the keys' folder");		
+	
 			return;
 		}
 

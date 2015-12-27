@@ -71,7 +71,7 @@ public class DBHelper
 		}
 		catch(SQLException ex)
 		{
-			System.out.println(TAG + " : " + "Cannot connect the database");
+			System.out.println(TAG + " : " + "Cannot connect to database");
 		}
 		finally
 		{
@@ -134,7 +134,7 @@ public class DBHelper
 		}
 		catch(SQLException ex)
 		{
-			System.out.println(TAG + " : " + "Cannot connect the database");
+			System.out.println(TAG + " : " + "Cannot connect to database");
 		}
 		finally
 		{
@@ -183,7 +183,7 @@ public class DBHelper
 		}
 		catch(SQLException ex)
 		{
-			System.out.println(TAG + " : " + "Cannot connect the database");
+			System.out.println(TAG + " : " + "Cannot connect to database");
 		}
 		finally
 		{

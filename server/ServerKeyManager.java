@@ -1,3 +1,7 @@
+import java.io.File;
+import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
 import java.security.cert.Certificate;
 import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
@@ -89,6 +93,11 @@ public class ServerKeyManager extends KeyManager
 		{
 			KeyStore clients_keyStore = loadKeyStore(CLIENTS_KEYSTORE, PUBLIC_KEYSTORE_PASS.toCharArray());
 
+			if( !clients_keyStore.isCertificateEntry(certificate_alias) )
+			{
+				return false;
+			}
+
 			Certificate cert = loadCertificate(cert_filepath);
 			
 			clients_keyStore.setCertificateEntry(certificate_alias, cert);
@@ -103,6 +112,60 @@ public class ServerKeyManager extends KeyManager
 		}
 
 		return true;
+	}
+
+
+	/*
+	 * deletes from the clients keystore the client certificate identified by the given alias
+	 */
+	public boolean removeClientCertificate(String certificate_alias)
+	{
+		try
+		{
+			KeyStore clients_keyStore = loadKeyStore(CLIENTS_KEYSTORE, PUBLIC_KEYSTORE_PASS.toCharArray());
+			
+			if( !clients_keyStore.isCertificateEntry(certificate_alias) )
+			{
+				return false;
+			}
+
+			clients_keyStore.deleteEntry(certificate_alias);
+
+			saveKeyStore(clients_keyStore, CLIENTS_KEYSTORE, PUBLIC_KEYSTORE_PASS.toCharArray());
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/*
+	 * returns the imported clients' aliases as a list of Strings
+	 */
+	public List<String> getClients()
+	{
+		List<String> clients = new ArrayList<String>();
+
+		try
+		{
+			KeyStore clients_keyStore = loadKeyStore(CLIENTS_KEYSTORE, PUBLIC_KEYSTORE_PASS.toCharArray());
+
+			for(Enumeration<String> clients_aliases = clients_keyStore.aliases(); clients_aliases.hasMoreElements();)
+       			{
+				clients.add( clients_aliases.nextElement() );
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+		return clients;
 	}
 
 
@@ -138,5 +201,33 @@ public class ServerKeyManager extends KeyManager
 	}
 
 	
+	/*
+	 * checks if the necessary keystores exist
+	 */
+	public static boolean checkSetup()
+	{		
+		// (!) do a path combiner here
+		File priv_ketstore = new File(KEYS_DIRECTORY + "/" + PRIVATE_KEYSTORE);
+		if( !priv_ketstore.exists() )
+		{
+			return false;
+		}
+
+		// (!) do a path combiner here
+		File pub_ketstore = new File(KEYS_DIRECTORY + "/" + PUBLIC_KEYSTORE);
+		if( !pub_ketstore.exists() )
+		{
+			return false;
+		}
+
+		// (!) do a path combiner here
+		File cl_ketstore = new File(KEYS_DIRECTORY + "/" + CLIENTS_KEYSTORE);
+		if( !cl_ketstore.exists() )
+		{
+			return false;
+		}
+
+		return true;
+	}
 
 }

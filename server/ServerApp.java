@@ -1,5 +1,6 @@
 import java.util.Timer;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ServerApp implements PushServerListener, PullServerListener, DbPusherListener, DbPullerListener
@@ -202,9 +203,16 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 
 
 	private static boolean setupKeys()
-	{
-		ServerKeyManager serverKeyManager = new ServerKeyManager();
+	{	
+		if( ServerKeyManager.checkSetup() )
+		{
+			System.out.println("can not setup keys / another set of keys is already in place");		
 	
+			return false;
+		}
+
+		ServerKeyManager serverKeyManager = new ServerKeyManager();
+
 		if( serverKeyManager.getKeyPair() )
 		{
 			if( serverKeyManager.exportCertificate() )
@@ -220,14 +228,72 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 	}
 
 
+	private static boolean showClients()
+	{
+		if( !ServerKeyManager.checkSetup() )
+		{
+			System.out.println("keys not found / run setup_keys first to create keys");		
+	
+			return false;
+		}
+
+		ServerKeyManager serverKeyManager = new ServerKeyManager();
+
+		List<String> clients = serverKeyManager.getClients();
+
+		if(clients.size() == 0)
+		{
+			System.out.println("no clients to show");
+		}
+
+		for (String client : clients)
+		{
+			System.out.println(client);
+		}
+
+		return true;
+	}
+
+
 	private static boolean addClient(String cert_filepath, String client_alias)
 	{
+		if( !ServerKeyManager.checkSetup() )
+		{
+			System.out.println("keys not found / run setup_keys first to create keys");		
+	
+			return false;
+		}
+
 		ServerKeyManager serverKeyManager = new ServerKeyManager();
 
 		if( serverKeyManager.addClientCertificate(cert_filepath, client_alias) )
 		{
 			return true;
 		}
+
+		System.out.println("could not import client / or the given alias already exists");
+
+		return false;
+	}
+
+	
+	private static boolean deleteClient(String client_alias)
+	{
+		if( !ServerKeyManager.checkSetup() )
+		{
+			System.out.println("keys not found / run setup_keys first to create keys");		
+	
+			return false;
+		}
+
+		ServerKeyManager serverKeyManager = new ServerKeyManager();
+
+		if( serverKeyManager.removeClientCertificate(client_alias) )
+		{
+			return true;
+		}
+
+		System.out.println("could not remove client / or the alias does not exist");
 
 		return false;
 	}
@@ -253,11 +319,28 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 		{
 			if( args[0].equals("setup_keys") )
 			{
-				if(setupKeys())
+				if( setupKeys() )
+				{
+					return true;
+				}
+			}
+			else if( args[0].equals("show_clients") )
+			{
+				if( showClients() )
 				{
 					return true;
 				}
 			}				
+		}
+		else if(args.length == 2)
+		{
+			if( args[0].equals("delete_client") )
+			{
+				if( deleteClient(args[1]) )
+				{
+					return true;
+				}
+			}
 		}
 		else if(args.length == 3)
 		{
@@ -283,6 +366,14 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 				printUsage();
 			}
 
+			return;
+		}
+
+
+		if( !ServerKeyManager.checkSetup() )
+		{
+			System.out.println("keys not found / run setup_keys first to create keys");		
+	
 			return;
 		}
 

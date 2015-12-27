@@ -1,3 +1,4 @@
+import java.io.File;
 import java.security.cert.Certificate;
 import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
@@ -69,6 +70,45 @@ public class ClientKeyManager extends KeyManager
 		{
 			ex.printStackTrace();
 
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/*
+	 * checks if the necessary keystores exist
+	 */
+	public static boolean checkSetup()
+	{		
+		// (!) do a path combiner here
+		File priv_ketstore = new File(KEYS_DIRECTORY + "/" + PRIVATE_KEYSTORE);
+		if( !priv_ketstore.exists() )
+		{
+			return false;
+		}
+
+		// (!) do a path combiner here
+		File pub_ketstore = new File(KEYS_DIRECTORY + "/" + "client.cert");
+		if( !pub_ketstore.exists() )
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+
+	/*
+	 * checks if the server truststore exists
+	 */
+	public static boolean checkServerTrustStore()
+	{		
+		// (!) do a path combiner here
+		File priv_ketstore = new File(KEYS_DIRECTORY + "/" + SERVER_KEYSTORE);
+		if( !priv_ketstore.exists() )
+		{
 			return false;
 		}
 

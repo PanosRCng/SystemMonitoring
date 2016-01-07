@@ -93,7 +93,7 @@ public class ServerKeyManager extends KeyManager
 		{
 			KeyStore clients_keyStore = loadKeyStore(CLIENTS_KEYSTORE, PUBLIC_KEYSTORE_PASS.toCharArray());
 
-			if( !clients_keyStore.isCertificateEntry(certificate_alias) )
+			if( clients_keyStore.isCertificateEntry(certificate_alias) )
 			{
 				return false;
 			}

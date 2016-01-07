@@ -2,26 +2,46 @@
 System Monitoring
 
 
-   ServerApp - (Push and Pull server)
+ *  ServerApp - (Push and Pull server)
 
-   PushClientApp - (placed to the monitored host)
+ *  PushClientApp - (placed to the monitored host)
 
-   PullClientApp - (monitoring app)
-
-
-
-  requirements:
-
-	 - Java JDK (tested with java version 1.7, OpenJDK)
-	 - MySQL
+ *  PullClientApp - (monitoring app)
 
 
-  external libraries used:
+    requirements:
 
-	google-gson (https://code.google.com/p/google-gson/)
-	JDBC Driver for MySQL (http://dev.mysql.com/downloads/connector/j/)
-	Sigar (https://support.hyperic.com/display/SIGAR/Home)
-	Bouncy Castle (https://www.bouncycastle.org/java.html)
+	   - Java JDK (tested with java version 1.7, OpenJDK)
+	   - MySQL
 
 
-	(*) proof of concept stage
+    external libraries used:
+
+	  google-gson (https://code.google.com/p/google-gson/)
+	  JDBC Driver for MySQL (http://dev.mysql.com/downloads/connector/j/)
+	  Sigar (https://support.hyperic.com/display/SIGAR/Home)
+	  Bouncy Castle (https://www.bouncycastle.org/java.html)
+
+
+
+ *  WebApp - (web monitoring app - placed to the server)
+
+
+    requirements:
+
+	   - a web server (apache, etc)
+	   - php
+	   - MySQL
+
+
+    other projects used:
+
+	   laravel (https://laravel.com/)
+	   jQuery (https://jquery.com/)
+	   Bootstrap (http://getbootstrap.com/)
+
+
+	
+  (*) proof of concept stage
+
+

@@ -3,6 +3,10 @@
 
 @section('body')
 
+    <script src={{ URL::asset('js/jquery.canvasjs.min.js') }}></script>
+    <script src={{ URL::asset('js/charts.js') }}></script>
+
+
     @include('includes.header')
 
     <div class="panel panel-default">
@@ -16,13 +20,18 @@
             <div class="panel panel-default">
                 <div class="panel-heading">{{ $machine  }}</div>
                 <div class="panel-body">
-                    <h5>status
+                    <h5 id="{{ $machine  }}_sync_label">
+                    <!--
                         <span class="label label-default">info</span>
-                        <span class="label label-success">on</span>
-                        <span class="label label-danger">off</span>
-                        <span class="label label-warning">Warning</span>
+                        <span class="label label-warning">Warning</span> -->
                     </h5>
-                    infos and some small graphs here
+
+                    <div class="row">
+                        <div class="col-sm-6" id="{{ $machine  }}_cpuUsageChartContainer" style="height:100px; width:400px"></div>
+                        <div class="col-sm-6" id="{{ $machine  }}_ramUsageChartContainer" style="height:100px; width:400px"></div>
+                        <div class="col-sm-6" id="{{ $machine  }}_netUsageChartContainer" style="height:100px; width:400px"></div>
+                    </div>
+
                 </div>
             </div>
 

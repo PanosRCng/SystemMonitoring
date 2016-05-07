@@ -15,6 +15,16 @@ Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+Route::get('charts/cpuUsage', 'HomeController@cpuUsageChart');
+
+Route::get('charts/ramUsage', 'HomeController@ramUsageChart');
+
+Route::get('charts/netUsage', 'HomeController@netUsageChart');
+
+Route::get('machinesList', 'HomeController@machinesList');
+
+Route::get('isSynced', 'HomeController@isSynced');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

@@ -26,15 +26,6 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 	private final static int PULL_SERVER_PORT = 6004;
 
 
-	// keeps the PushServer status
-	private String pushServerStatus;
-
-	// keeps the PullServer status
-	private String pullServerStatus;
-
-	// keeps the DbPusher status
-	private String dbPusherStatus;
-
 	// keeps the PullServer object
 	private PullServer pullServer; 
 
@@ -55,15 +46,16 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 	}
 
 
+
+
+
 	/*
-	 * calls back when PushServer status changed
+	 * calls back when a Thread's status changed
 	 */
 	@Override
-	public void onPushServerStatusChanged(String status)
+	public void onThreadStatusChanged(String TAG, String status)
 	{
-		pushServerStatus = status;
-
-		System.out.println(PushServerListener.TAG + " : " + pushServerStatus);
+		System.out.println(TAG + " : " + status);
 	}
 
 
@@ -76,32 +68,9 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 		// add Push to pushList
 		pushList.add(push);
 
-		System.out.println(PushServerListener.TAG + " : " + "Push received from " + push.getHeader());
+		System.out.println(PushServer.TAG + " : " + "Push received from " + push.getHeader());
 	}
 
-
-	/*
-	 * calls back when PullServer status changed
-	 */
-	@Override
-	public void onPullServerStatusChanged(String status)
-	{
-		pullServerStatus = status;
-
-		System.out.println(PullServerListener.TAG + " : " + pullServerStatus);
-	}
-
-
-	/*
-	 * calls back when DbPusher status changed
-	 */
-	@Override
-	public void onDbPusherStatusChanged(String status)
-	{
-		dbPusherStatus = status;
-
-		System.out.println(DbPusherListener.TAG + " : " + dbPusherStatus);
-	}
 
 
 	/*
@@ -112,17 +81,7 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 	{
 		pushList.clear();
 
-		System.out.println(DbPusherListener.TAG + " : " + "PushList pushed to database");
-	}
-
-
-	/*
-	 * calls back when DbPuller status changed
-	 */
-	@Override
-	public void onDbPullerStatusChanged(String status)
-	{
-		System.out.println(DbPullerListener.TAG + " : " + status);
+		System.out.println(DbPusher.TAG + " : " + "PushList pushed to database");
 	}
 
 
@@ -140,6 +99,9 @@ public class ServerApp implements PushServerListener, PullServerListener, DbPush
 			pullServer.setPull(pull);
 		}
 	}
+
+
+
 
 
 	/*

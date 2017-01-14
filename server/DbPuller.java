@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 
 public class DbPuller extends TimerTask
 {
+	public final static String TAG = "DB PULLER";
+
 	// the object that implements the DbPullerListener interface
 	private static DbPullerListener dbPullerListener;
 
@@ -28,7 +30,7 @@ public class DbPuller extends TimerTask
 	@Override
 	public void run()
 	{
-		dbPullerListener.onDbPullerStatusChanged("pulling machines' records from database");
+		dbPullerListener.onThreadStatusChanged(TAG, "pulling machines' records from database");
 
 		// get and init a calendar
 		GregorianCalendar gCalendar = new GregorianCalendar();

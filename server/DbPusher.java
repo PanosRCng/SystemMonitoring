@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class DbPusher extends TimerTask
 {
+	public final static String TAG = "DB PUSHER";
+
 	// the object that implements the DbPusherListener interface
 	private static DbPusherListener dbPusherListener;
 
@@ -31,7 +33,7 @@ public class DbPusher extends TimerTask
 	{
 		if( pushList.size() > 2 )
 		{
-			dbPusherListener.onDbPusherStatusChanged("pushing pushList to database");
+			dbPusherListener.onThreadStatusChanged(TAG, "pushing pushList to database");
 
 			ArrayList<Report> db_reports = new ArrayList<Report>();
 
